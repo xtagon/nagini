@@ -14,28 +14,35 @@ endpoint.
 
 To modify snake configuration, edit `config/battlesnake.exs`.
 
-## Deployment
+The logger is configured to log at the debug level (very verbose) and logs are
+stored in `/tmp/nagini.log`. This is a workaround for Nanobox stdout log
+streaming being broken.
 
-Nagini is a Phoenix (Elixir) application without an external database
-dependency, so deployment should be easy on various platforms, but the
-currently supported way is through Google App Engine.
+## Development with Nanobox
 
-Note that Google Cloud Compute would be a better deploy target than App Engine
-because App Engine does not support us-west1, which is the location nearest to
-Battlesnake's engine.
+  * Install Docker
+  * Install Nanobox CLI and log in
+  * `nanobox dns add local nagini.local`
+  * `nanobox run`
 
-I opted to start with App Engine because the Elixir tutorial for it looked
-simpler.
+Note that Nanobox's Elixir engine may run a different version of Elixir than
+this project's .tool-versions lock file expects. This may not behave as
+intended.
 
-You will need:
+## Deployment with Nanobox
 
-  * [GCloud SDK](https://cloud.google.com/sdk/docs/quickstart-debian-ubuntu)
+  * `nanobox evar add dry-run MIX_ENV=prod PORT=8080`
+  * `nanobox deploy dry-run`
+  * Test the dry-run deployed endpoint
 
-See https://cloud.google.com/community/tutorials/elixir-phoenix-on-google-app-engine
+  * `nanobox remote add app-name`
+  * `nanobox evar add app-name MIX_ENV=prod PORT=8080`
+  * `nanobox deploy`
 
-Once everything is set up, deploy with:
+To read logs:
 
-  * `gcloud app deploy`
+  * `nanobox console app-name web.main`
+  * `tail -f /tmp/nagini.log`
 
 ## License
 

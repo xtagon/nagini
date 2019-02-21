@@ -15,9 +15,15 @@ config :nagini, NaginiWeb.Endpoint,
   pubsub: [name: Nagini.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
-config :logger, :console,
+
+config :logger,
+  backends: [:console, {LoggerFileBackend, :debug_log}],
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
+config :logger, :debug_log,
+  path: "/tmp/nagini.log",
+  level: :debug
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
