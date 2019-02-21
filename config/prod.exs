@@ -11,7 +11,11 @@ use Mix.Config
 # before starting your production server.
 config :nagini, NaginiWeb.Endpoint,
   http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [host: "example.com", port: 80],
+  url: [host: "nagini.xtagon.com", port: 80],
+  load_from_system_env: true,
+  check_origin: false,
+  server: true,
+  root: ".",
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Print debug messages in production
