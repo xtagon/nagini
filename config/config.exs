@@ -12,7 +12,8 @@ config :nagini, NaginiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "7BXYlUkzkFqDz626mxjOFcvJkHMqQjx6ah5P5BMOO1l/TOjg3utCEMoWMrORlO2Z",
   render_errors: [view: NaginiWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: Nagini.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Nagini.PubSub, adapter: Phoenix.PubSub.PG2],
+  instrumenters: [Appsignal.Phoenix.Instrumenter]
 
 # Configures Elixir's Logger
 
@@ -29,6 +30,7 @@ config :logger, :debug_log,
 config :phoenix, :json_library, Jason
 
 import_config "battlesnake.exs"
+import_config "appsignal.exs"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

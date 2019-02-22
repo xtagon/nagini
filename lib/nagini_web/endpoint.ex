@@ -1,5 +1,6 @@
 defmodule NaginiWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :nagini
+  use Appsignal.Phoenix
 
   socket "/socket", NaginiWeb.UserSocket,
     websocket: true,

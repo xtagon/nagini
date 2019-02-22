@@ -31,15 +31,29 @@ intended.
 
 ## Deployment with Nanobox
 
+Test with a dry-run first:
+
   * `nanobox evar add dry-run MIX_ENV=prod PORT=8080`
+  * `nanobox evar add dry-run APPSIGNAL_APP_NAME="Nagini" APPSIGNAL_APP_ENV="dry-run" APPSIGNAL_PUSH_API_KEY="FIXME"`
   * `nanobox deploy dry-run`
   * Test the dry-run deployed endpoint
 
+Update the release version:
+
+  * Edit `mix.exs`
+
+Deploy:
+
   * `nanobox remote add app-name`
   * `nanobox evar add app-name MIX_ENV=prod PORT=8080`
+  * `nanobox evar add app-name APPSIGNAL_APP_NAME="Nagini" APPSIGNAL_APP_ENV="prod" APPSIGNAL_PUSH_API_KEY="FIXME"`
   * `nanobox deploy`
 
-To read logs:
+## Monitoring
+
+Monitoring is set up to work with AppSignal if the environment is configured.
+
+To read the Nanobox server logs:
 
   * `nanobox console app-name web.main`
   * `tail -f /tmp/nagini.log`

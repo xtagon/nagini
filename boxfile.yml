@@ -1,5 +1,8 @@
 run.config:
   engine: elixir
+  engine.config:
+    runtime: elixir-1.5
+    erlang_runtime: erlang-20
   dev_packages:
     - inotify-tools
   fs_watch: true

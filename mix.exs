@@ -19,7 +19,7 @@ defmodule Nagini.MixProject do
   def application do
     [
       mod: {Nagini.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :appsignal]
     ]
   end
 
@@ -37,7 +37,15 @@ defmodule Nagini.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:logger_file_backend, "~> 0.0.10"}
+      {:logger_file_backend, "~> 0.0.10"},
+      {:appsignal, "~> 1.0"},
+
+      # Workaround locks:
+      #
+      # Appsignal 1.0 requires Poison. Poison 4 requires Elixir 1.6. Nanobox
+      # does not support Elixir 1.6 yet, so we lock Poison to 3.
+      #
+      {:poison, "~> 3.1"}
     ]
   end
 end
