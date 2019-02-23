@@ -1,0 +1,62 @@
+defmodule Nagini.Solver do
+  require Logger
+  import Nagini.Helper
+
+  @directions ~w(up down left right)
+
+  def solve(input, _timeout) when %{} == input do
+    # See https://github.com/battlesnakeio/roadmap/issues/258
+    Logger.warn("Move API request contained empty params. Unable to solve for this turn.")
+
+    # TODO: In the future, we might be able to solve for the move based on
+    # pre-calculated predicted outcomes since the last move. But for now, just
+    # give up
+    nil
+  end
+
+  def solve(input, _timeout) do
+    Logger.debug("Solving for turn #{input["turn"]} for snake #{input["you"]["name"]} in game #{input["game"]["id"]}")
+
+    solutions = @directions
+    |> Enum.map(&(analyze_move(input, &1)))
+    |> Enum.sort_by(&(-&1.value))
+
+    Logger.debug("All solutions are: #{inspect(solutions)}")
+
+    [best_solution | _] = solutions
+
+    final_move = case best_solution do
+      nil ->
+        Logger.debug("No solution found")
+        nil
+      _ ->
+        Logger.debug("Best solution is: #{inspect(best_solution)}")
+        best_solution[:direction]
+    end
+
+    Logger.debug("Final move is: #{inspect(final_move)}")
+
+    final_move
+  end
+
+  defp analyze_move(input, move) do
+    %{direction: move, value: value_of_move(input, move)}
+  end
+
+  defp value_of_move(input, move) do
+    %{"you" => %{"body" => [head | _]}} = input
+
+    target = step(head, move)
+
+    probability_of_collision = if out_of_bounds?(input, target) do
+      Logger.debug("Moving #{move} would result in wall collision")
+      1
+    else
+      probability = probability_of_collision_with_snake(input, target)
+      Logger.debug("Probability that moving #{move} would result in a snake collision is #{inspect(probability)}")
+      probability
+    end
+
+    -1 * probability_of_collision
+  end
+end

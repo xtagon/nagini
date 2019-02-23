@@ -2,7 +2,7 @@ defmodule NaginiWeb.BattlesnakeControllerTest do
   use NaginiWeb.ConnCase
 
   @valid_color ~r/^#[0-9a-fA-F]{6}$/
-  @valid_moves MapSet.new(~w(up down left right))
+  @valid_moves MapSet.new([nil | ~w(up down left right)])
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}

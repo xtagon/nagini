@@ -49,6 +49,10 @@ Deploy:
   * `nanobox evar add app-name APPSIGNAL_APP_NAME="Nagini" APPSIGNAL_APP_ENV="prod" APPSIGNAL_PUSH_API_KEY="FIXME"`
   * `nanobox deploy`
 
+## Configuration
+
+  * Edit `config/battlesnake.exs`
+
 ## Monitoring
 
 Monitoring is set up to work with AppSignal if the environment is configured.
