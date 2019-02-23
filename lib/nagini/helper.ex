@@ -49,6 +49,28 @@ defmodule Nagini.Helper do
     end
   end
 
+  def probability_of_eating_food(%{
+    "board" => %{"food" => food}
+  }, target) do
+    nearest_food_distance = food
+    |> Enum.map(&(manhattan_distance(&1, target)))
+    |> Enum.sort
+    |> Enum.at(0)
+
+    case nearest_food_distance do
+      0 ->
+        Logger.debug("There is no food nearby.")
+      _ ->
+        1 / nearest_food_distance
+    end
+  end
+
+  def manhattan_distance(a, b) do
+    x_distance = abs(a["x"] - b["x"])
+    y_distance = abs(a["y"] - b["y"])
+    x_distance + y_distance
+  end
+
   def adjascent?(a, b) do
     abs(a["x"] - b["x"]) == 1 or abs(a["y"] - b["y"]) == 1
   end

@@ -17,9 +17,12 @@ defmodule Nagini.Solver do
   def solve(input, _timeout) do
     Logger.debug("Solving for turn #{input["turn"]} for snake #{input["you"]["name"]} in game #{input["game"]["id"]}")
 
+    # Sorting by multiple fields has to happen in reverse order, so keep that in mind
     solutions = @directions
     |> Enum.map(&(analyze_move(input, &1)))
-    |> Enum.sort_by(&(-&1.value))
+    |> Enum.sort_by(&(&1.value.food_seeking))
+    |> Enum.sort_by(&(&1.value.collision_avoidance))
+    |> Enum.reverse
 
     Logger.debug("All solutions are: #{inspect(solutions)}")
 
@@ -57,6 +60,9 @@ defmodule Nagini.Solver do
       probability
     end
 
-    -1 * probability_of_collision
+    %{
+      collision_avoidance: -1 * probability_of_collision,
+      food_seeking: probability_of_eating_food(input, target)
+    }
   end
 end
