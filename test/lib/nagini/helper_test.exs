@@ -18,6 +18,17 @@ defmodule Nagini.HelperTest do
   end
 
   describe "probability of eating food" do
+    test "returns a probability of 1 it is directly adjacent" do
+      input = %{"board" => %{"food" => [%{"x" => 2, "y" => 10}, %{"x" => 0, "y" => 6}, %{"x" => 3, "y" => 6}, %{"x" => 3, "y" => 14}, %{"x" => 11, "y" => 3}], "height" => 19, "snakes" => [%{"body" => [%{"x" => 0, "y" => 5}, %{"x" => 0, "y" => 4}, %{"x" => 0, "y" => 3}], "health" => 95, "id" => "gs_9jCCRb34hk9kWS76mRbgGgfS", "name" => "xtagon/Nagini"}, %{"body" => [%{"x" => 17, "y" => 12}, %{"x" => 17, "y" => 13}, %{"x" => 17, "y" => 14}, %{"x" => 17, "y" => 15}], "health" => 98, "id" => "gs_bd4X6B4pGQK6wyVPYjVcVgBd", "name" => "eyilee/Alpha Snake"}, %{"body" => [%{"x" => 1, "y" => 14}, %{"x" => 0, "y" => 14}, %{"x" => 0, "y" => 15}, %{"x" => 0, "y" => 16}], "health" => 98, "id" => "gs_hYBTxfd3mtbvcbTFBXhSBFKb", "name" => "alecj1240/Alec's Snake"}, %{"body" => [%{"x" => 18, "y" => 5}, %{"x" => 18, "y" => 4}, %{"x" => 17, "y" => 4}, %{"x" => 17, "y" => 3}], "health" => 99, "id" => "gs_6D4QdrMCxWG79bYqBGBvgqcJ", "name" => "joram/jsnek"}, %{"body" => [%{"x" => 4, "y" => 1}, %{"x" => 5, "y" => 1}, %{"x" => 6, "y" => 1}], "health" => 95, "id" => "gs_jryrXQFRBwD3C6gMcVFw3Cf4", "name" => "hobbyquaker/hobbyquaker"}, %{"body" => [%{"x" => 4, "y" => 17}, %{"x" => 5, "y" => 17}, %{"x" => 6, "y" => 17}], "health" => 95, "id" => "gs_kFjBQFXKjbmCM4Jf9vBhKt9W", "name" => "RyanBarclay/striper_snek"}, %{"body" => [%{"x" => 1, "y" => 8}, %{"x" => 0, "y" => 8}, %{"x" => 0, "y" => 7}], "health" => 95, "id" => "gs_VHqmhCT9DwdgH9cG83rQkmmT", "name" => "battlesnake/Training Snake 8"}], "width" => 19}, "game" => %{"id" => "24173c8e-1d7d-49b1-be5b-9be8a50f2422"}, "turn" => 5, "you" => %{"body" => [%{"x" => 0, "y" => 5}, %{"x" => 0, "y" => 4}, %{"x" => 0, "y" => 3}], "health" => 95, "id" => "gs_9jCCRb34hk9kWS76mRbgGgfS", "name" => "xtagon/Nagini"}}
+
+      %{"you" => %{"body" => [head | _]}} = input
+      down = step(head, "down")
+      right = step(head, "right")
+
+      assert probability_of_eating_food(input, down) == 1
+      assert probability_of_eating_food(input, right) == 0.5
+    end
+
     test "does not have an arithmetic error" do
       input = %{
         "board" => %{
