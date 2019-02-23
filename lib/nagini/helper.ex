@@ -28,13 +28,20 @@ defmodule Nagini.Helper do
     if definitely do
       1
     else
-      number_of_snakes_that_could_collide = snakes
-      |> Enum.reject(&(&1["id"] == you["id"]))
-      |> Enum.map(&(Enum.at(&1["body"], 0)))
+      other_snakes = snakes
+      |> Enum.reject(&(&1["id"] == you["id"] && &1["body"] == you["body"]))
+
+      snakes_that_could_collide = other_snakes
       |> Enum.filter(&(adjascent?(&1, target)))
-      |> length
+
+      number_of_snakes_that_could_collide = length(snakes_that_could_collide)
 
       Logger.debug("Number of snakes that could choose to collide: #{inspect(number_of_snakes_that_could_collide)}")
+
+      snake_names = snakes_that_could_collide
+      |> Enum.map(&(&1["name"]))
+
+      Logger.debug("Snakes that could choose to collide: #{inspect(snake_names)}")
 
       case number_of_snakes_that_could_collide do
         0 ->
@@ -72,6 +79,7 @@ defmodule Nagini.Helper do
   end
 
   def adjascent?(a, b) do
-    abs(a["x"] - b["x"]) == 1 or abs(a["y"] - b["y"]) == 1
+    (a["x"] == b["x"] and abs(a["y"] - b["y"]) == 1) or
+    (a["y"] == b["y"] and abs(a["x"] - b["x"]) == 1)
   end
 end
