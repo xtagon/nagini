@@ -9,3 +9,6 @@ run.config:
 
 web.main:
   start: node-start mix phx.server
+  writable_dirs:
+    # Fixes this error: ** (File.Error) could not write to file "/app/_build/prod/lib/app-name/priv": permission denied
+    - _build
