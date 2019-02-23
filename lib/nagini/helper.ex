@@ -62,11 +62,12 @@ defmodule Nagini.Helper do
     nearest_food_distance = food
     |> Enum.map(&(manhattan_distance(&1, target)))
     |> Enum.sort
-    |> Enum.at(0)
+    |> Enum.at(0) || 0
 
     case nearest_food_distance do
       0 ->
         Logger.debug("There is no food nearby.")
+        0
       _ ->
         1 / nearest_food_distance
     end
