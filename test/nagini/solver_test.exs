@@ -43,4 +43,13 @@ defmodule Nagini.SolverTest do
       assert solution == "down"
     end
   end
+
+  describe "2019-02-24 game 5b4a8904-0c95-46cd-b598-2fd30c52ab10 turn 27" do
+    test "should move down because moving left has a 100% chance of trapping myself" do
+      input = %{"board" => %{"food" => [], "height" => 11, "snakes" => [%{"body" => [%{"x" => 10, "y" => 9}, %{"x" => 10, "y" => 8}, %{"x" => 9, "y" => 8}, %{"x" => 8, "y" => 8}, %{"x" => 8, "y" => 9}, %{"x" => 8, "y" => 10}, %{"x" => 9, "y" => 10}, %{"x" => 10, "y" => 10}], "health" => 97, "id" => "gs_S9V9KJjSdh3vRQ8t7p3JR6VS", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 1, "y" => 6}, %{"x" => 1, "y" => 7}, %{"x" => 0, "y" => 7}, %{"x" => 0, "y" => 6}], "health" => 93, "id" => "gs_WffVC4M3pXqyPrkjV9MFqxgG", "name" => "codeallthethingz / JamJan"}, %{"body" => [%{"x" => 5, "y" => 4}, %{"x" => 4, "y" => 4}, %{"x" => 3, "y" => 4}, %{"x" => 2, "y" => 4}, %{"x" => 1, "y" => 4}], "health" => 92, "id" => "gs_K9tGphxDHcQwSFprxkmm6ffC", "name" => "ericdstone7 / spectralsnake"}], "width" => 11}, "game" => %{"id" => "5b4a8904-0c95-46cd-b598-2fd30c52ab10"}, "turn" => 27, "you" => %{"body" => [%{"x" => 10, "y" => 9}, %{"x" => 10, "y" => 8}, %{"x" => 9, "y" => 8}, %{"x" => 8, "y" => 8}, %{"x" => 8, "y" => 9}, %{"x" => 8, "y" => 10}, %{"x" => 9, "y" => 10}, %{"x" => 10, "y" => 10}], "health" => 97, "id" => "gs_S9V9KJjSdh3vRQ8t7p3JR6VS", "name" => "xtagon / Nagini"}}
+
+      solution = solve(input, @move_timeout)
+      assert solution == "do"
+    end
+  end
 end
