@@ -2,6 +2,38 @@ defmodule NaginiWeb.BattlesnakeControllerTest do
   use NaginiWeb.ConnCase
 
   @valid_color ~r/^#[0-9a-fA-F]{6}$/
+
+  @valid_head_types MapSet.new([nil | ~w(
+    beluga
+    bendr
+    dead
+    evil
+    fang
+    pixel
+    regular
+    safe
+    sand-worm
+    shades
+    silly
+    smile
+    tongue
+  )])
+
+  @valid_tail_types MapSet.new([nil | ~w(
+    block-bum
+    bolt
+    curled
+    fat-rattle
+    freckled
+    hook
+    pixel
+    regular
+    round-bum
+    sharp
+    skinny
+    small-rattle
+  )])
+
   @valid_moves MapSet.new([nil | ~w(up down left right)])
 
   setup %{conn: conn} do
@@ -12,9 +44,15 @@ defmodule NaginiWeb.BattlesnakeControllerTest do
     test "responds with a color", %{conn: conn} do
       conn = post(conn, "/start")
 
-      %{"color" => color} = json_response(conn, 200)
+      snake_configuration =  json_response(conn, 200)
+
+      color = snake_configuration["color"]
+      headType = snake_configuration["headType"]
+      tailType = snake_configuration["tailType"]
 
       assert Regex.match?(@valid_color, color)
+      assert Enum.member?(@valid_head_types, headType)
+      assert Enum.member?(@valid_tail_types, tailType)
     end
   end
 
