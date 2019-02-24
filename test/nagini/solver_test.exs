@@ -34,4 +34,13 @@ defmodule Nagini.SolverTest do
       assert solution == "left"
     end
   end
+
+  describe "2019-02-24 game e96a91dd-306c-4fbd-a661-b6c90ba8e106 turn 210" do
+    test "should move down because moving right has a 100% chance of trapping myself" do
+      input = %{"board" => %{"food" => [%{"x" => 3, "y" => 6}, %{"x" => 1, "y" => 4}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 9, "y" => 7}, %{"x" => 8, "y" => 7}, %{"x" => 7, "y" => 7}, %{"x" => 6, "y" => 7}, %{"x" => 5, "y" => 7}, %{"x" => 5, "y" => 6}, %{"x" => 6, "y" => 6}, %{"x" => 7, "y" => 6}, %{"x" => 8, "y" => 6}, %{"x" => 9, "y" => 6}, %{"x" => 9, "y" => 5}, %{"x" => 10, "y" => 5}, %{"x" => 10, "y" => 4}, %{"x" => 9, "y" => 4}, %{"x" => 8, "y" => 4}, %{"x" => 8, "y" => 5}, %{"x" => 7, "y" => 5}, %{"x" => 6, "y" => 5}, %{"x" => 5, "y" => 5}, %{"x" => 4, "y" => 5}, %{"x" => 4, "y" => 6}], "health" => 81, "id" => "gs_wR3pGg3kxmdP7GVqK9mvrVkD", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 1, "y" => 1}, %{"x" => 2, "y" => 1}, %{"x" => 3, "y" => 1}, %{"x" => 4, "y" => 1}, %{"x" => 4, "y" => 2}, %{"x" => 5, "y" => 2}, %{"x" => 6, "y" => 2}, %{"x" => 7, "y" => 2}], "health" => 53, "id" => "gs_VrrbJFgGtJ87Q349XgHWHWFG", "name" => "griever989 / l|lIl|IlIIIl|lIIIllIlll||lIl 2"}], "width" => 11}, "game" => %{"id" => "e96a91dd-306c-4fbd-a661-b6c90ba8e106"}, "turn" => 210, "you" => %{"body" => [%{"x" => 9, "y" => 7}, %{"x" => 8, "y" => 7}, %{"x" => 7, "y" => 7}, %{"x" => 6, "y" => 7}, %{"x" => 5, "y" => 7}, %{"x" => 5, "y" => 6}, %{"x" => 6, "y" => 6}, %{"x" => 7, "y" => 6}, %{"x" => 8, "y" => 6}, %{"x" => 9, "y" => 6}, %{"x" => 9, "y" => 5}, %{"x" => 10, "y" => 5}, %{"x" => 10, "y" => 4}, %{"x" => 9, "y" => 4}, %{"x" => 8, "y" => 4}, %{"x" => 8, "y" => 5}, %{"x" => 7, "y" => 5}, %{"x" => 6, "y" => 5}, %{"x" => 5, "y" => 5}, %{"x" => 4, "y" => 5}, %{"x" => 4, "y" => 6}], "health" => 81, "id" => "gs_wR3pGg3kxmdP7GVqK9mvrVkD", "name" => "xtagon / Nagini"}}
+
+      solution = solve(input, @move_timeout)
+      assert solution == "down"
+    end
+  end
 end
