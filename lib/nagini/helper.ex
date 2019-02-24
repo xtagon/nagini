@@ -32,7 +32,7 @@ defmodule Nagini.Helper do
       |> Enum.reject(&(&1["id"] == you["id"] && &1["body"] == you["body"]))
 
       snakes_that_could_collide = other_snakes
-      |> Enum.filter(&(adjascent?(&1, target)))
+      |> Enum.filter(&(adjascent?(head_of_snake(&1), target)))
 
       number_of_snakes_that_could_collide = length(snakes_that_could_collide)
 
@@ -86,4 +86,6 @@ defmodule Nagini.Helper do
     (a["x"] == b["x"] and abs(a["y"] - b["y"]) == 1) or
     (a["y"] == b["y"] and abs(a["x"] - b["x"]) == 1)
   end
+
+  def head_of_snake(%{"body" => [head | _]}), do: head
 end
