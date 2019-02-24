@@ -140,6 +140,24 @@ defmodule Nagini.HelperTest do
       assert left.value == -1
     end
 
+    test "should return slightly negative value for a draw collision" do
+      input = %{"board" => %{"food" => [%{"x" => 4, "y" => 8}, %{"x" => 10, "y" => 1}, %{"x" => 10, "y" => 9}, %{"x" => 4, "y" => 1}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 2, "y" => 3}, %{"x" => 3, "y" => 3}, %{"x" => 3, "y" => 2}, %{"x" => 3, "y" => 1}], "health" => 98, "id" => "gs_k6RXbQjYMfRPQTmSgDbWRMtJ", "name" => "bvanvugt / (bra)dsnek"}, %{"body" => [%{"x" => 4, "y" => 9}, %{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 96, "id" => "gs_XqG9pDQwdxMk93GXHCrd6rjD", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 1, "y" => 0}, %{"x" => 2, "y" => 0}, %{"x" => 3, "y" => 0}], "health" => 95, "id" => "gs_8bpyDjtWjfxHgMVJx8pF8SVP", "name" => "otonnesen / Test Snake Please Ignore"}, %{"body" => [%{"x" => 5, "y" => 8}, %{"x" => 6, "y" => 8}, %{"x" => 7, "y" => 8}, %{"x" => 7, "y" => 9}], "health" => 98, "id" => "gs_qmbfHJqJxr3TcTqt9dwv6qVM", "name" => "Kjarrigan / Crystal Serpent"}], "width" => 11}, "game" => %{"id" => "55f089dc-38f8-409e-8b05-da94d8e8e9a9"}, "turn" => 5, "you" => %{"body" => [%{"x" => 4, "y" => 9}, %{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 96, "id" => "gs_XqG9pDQwdxMk93GXHCrd6rjD", "name" => "xtagon / Nagini"}}
+
+      %{"you" => you} = input
+      %{"you" => %{"body" => [head | _]}} = input
+
+      other_snake = input["board"]["snakes"]
+      |> Enum.filter(&(&1["name"] == "Kjarrigan / Crystal Serpent"))
+      |> Enum.at(0)
+
+      up = check_collision(you, step(head, "up"), other_snake)
+
+      assert up.outcome == :draw
+      assert up.probability == 1/3
+      assert up.value < 0
+      assert up.value > -1
+    end
+
     test "should return 1/3 probability if another snake could move into that position and my snake is longer so I would win" do
       input = %{"board" => %{"food" => [%{"x" => 10, "y" => 0}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 7, "y" => 6}, %{"x" => 8, "y" => 6}, %{"x" => 8, "y" => 5}, %{"x" => 8, "y" => 4}, %{"x" => 8, "y" => 3}, %{"x" => 7, "y" => 3}, %{"x" => 7, "y" => 4}], "health" => 70, "id" => "gs_v9tSx9b7XxC7mJmg6gTxkbDd", "name" => "joram/jsnek"}, %{"body" => [%{"x" => 6, "y" => 7}, %{"x" => 5, "y" => 7}, %{"x" => 5, "y" => 8}, %{"x" => 6, "y" => 8}, %{"x" => 7, "y" => 8}, %{"x" => 8, "y" => 8}, %{"x" => 9, "y" => 8}, %{"x" => 10, "y" => 8}, %{"x" => 10, "y" => 7}, %{"x" => 9, "y" => 7}, %{"x" => 9, "y" => 6}, %{"x" => 9, "y" => 5}, %{"x" => 9, "y" => 4}, %{"x" => 9, "y" => 3}, %{"x" => 10, "y" => 3}], "health" => 91, "id" => "gs_8wp6R93SD7Q4SgmKXJRtVM4H", "name" => "xtagon/Nagini"}], "width" => 11}, "game" => %{"id" => "7c966b43-b1d9-449b-af0e-c1046e887c40"}, "turn" => 97, "you" => %{"body" => [%{"x" => 6, "y" => 7}, %{"x" => 5, "y" => 7}, %{"x" => 5, "y" => 8}, %{"x" => 6, "y" => 8}, %{"x" => 7, "y" => 8}, %{"x" => 8, "y" => 8}, %{"x" => 9, "y" => 8}, %{"x" => 10, "y" => 8}, %{"x" => 10, "y" => 7}, %{"x" => 9, "y" => 7}, %{"x" => 9, "y" => 6}, %{"x" => 9, "y" => 5}, %{"x" => 9, "y" => 4}, %{"x" => 9, "y" => 3}, %{"x" => 10, "y" => 3}], "health" => 91, "id" => "gs_8wp6R93SD7Q4SgmKXJRtVM4H", "name" => "xtagon/Nagini"}}
 

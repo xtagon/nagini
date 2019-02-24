@@ -60,7 +60,7 @@ defmodule Nagini.Helper do
 
     weight = case outcome do
       :win -> 1
-      :draw -> 0.5
+      :draw -> -0.5
       :free -> 0
       :lose -> -1
     end
