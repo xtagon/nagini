@@ -22,7 +22,7 @@ defmodule Nagini.Helper do
 
     direct_impact = other_snake["body"]
     |> Enum.reject(fn body_part ->
-      you_are_other_snake and body_part == Enum.at(you["body"], -1)
+      body_part == Enum.at(other_snake["body"], -1) and body_part != Enum.at(other_snake["body"], -2)
     end)
     |> Enum.any?(&(&1 == target))
 
