@@ -167,6 +167,22 @@ defmodule Nagini.HelperTest do
       assert down.value == -1
     end
 
+    test "should avoid colliding with you own body behind your head even if it is your tail" do
+      # In the first few turns, your body has multiple parts in the same cell
+      # where you start, so this happpens.
+      body = [%{"x" => 2, "y" => 1}, %{"x" => 1, "y" => 1}, %{"x" => 1, "y" => 1}]
+
+      you = %{"body" => body, "health" => 99, "id" => "gs_FCg36KG9T8pJkPGDfGHg7rkD", "name" => "xtagon / Nagini"}
+
+      [head | _] = body
+
+      left = check_collision(you, step(head, "left"), you)
+
+      assert left.outcome == :lose
+      assert left.probability == 1
+      assert left.value == -1
+    end
+
     test "should return slightly negative value for a draw collision" do
       input = %{"board" => %{"food" => [%{"x" => 4, "y" => 8}, %{"x" => 10, "y" => 1}, %{"x" => 10, "y" => 9}, %{"x" => 4, "y" => 1}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 2, "y" => 3}, %{"x" => 3, "y" => 3}, %{"x" => 3, "y" => 2}, %{"x" => 3, "y" => 1}], "health" => 98, "id" => "gs_k6RXbQjYMfRPQTmSgDbWRMtJ", "name" => "bvanvugt / (bra)dsnek"}, %{"body" => [%{"x" => 4, "y" => 9}, %{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 96, "id" => "gs_XqG9pDQwdxMk93GXHCrd6rjD", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 1, "y" => 0}, %{"x" => 2, "y" => 0}, %{"x" => 3, "y" => 0}], "health" => 95, "id" => "gs_8bpyDjtWjfxHgMVJx8pF8SVP", "name" => "otonnesen / Test Snake Please Ignore"}, %{"body" => [%{"x" => 5, "y" => 8}, %{"x" => 6, "y" => 8}, %{"x" => 7, "y" => 8}, %{"x" => 7, "y" => 9}], "health" => 98, "id" => "gs_qmbfHJqJxr3TcTqt9dwv6qVM", "name" => "Kjarrigan / Crystal Serpent"}], "width" => 11}, "game" => %{"id" => "55f089dc-38f8-409e-8b05-da94d8e8e9a9"}, "turn" => 5, "you" => %{"body" => [%{"x" => 4, "y" => 9}, %{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 96, "id" => "gs_XqG9pDQwdxMk93GXHCrd6rjD", "name" => "xtagon / Nagini"}}
 
