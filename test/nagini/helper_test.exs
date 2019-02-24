@@ -140,6 +140,19 @@ defmodule Nagini.HelperTest do
       assert left.value == -1
     end
 
+    test "should not avoid colliding with tail since the tail will move during the turn" do
+      input = %{"board" => %{"food" => [%{"x" => 7, "y" => 9}, %{"x" => 7, "y" => 10}, %{"x" => 9, "y" => 7}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 0, "y" => 10}, %{"x" => 1, "y" => 10}, %{"x" => 1, "y" => 9}, %{"x" => 0, "y" => 9}], "health" => 79, "id" => "gs_DhYtQhcYhxTRThbdb9CSgbgK", "name" => "codeallthethingz / JamJan"}, %{"body" => [%{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 76, "id" => "gs_GjVPtyw6SDg6MWjG9q3kf7fV", "name" => "PhoenixProgrammer / PhoenixProgramming"}, %{"body" => [%{"x" => 3, "y" => 7}, %{"x" => 2, "y" => 7}, %{"x" => 2, "y" => 8}, %{"x" => 3, "y" => 8}], "health" => 77, "id" => "gs_f7wXtgQWDXVbHd8XBjqxY8BX", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 0, "y" => 6}, %{"x" => 0, "y" => 5}, %{"x" => 0, "y" => 4}, %{"x" => 1, "y" => 4}, %{"x" => 1, "y" => 5}, %{"x" => 2, "y" => 5}, %{"x" => 2, "y" => 6}], "health" => 92, "id" => "gs_FwCRPcWFYDJJWhhCvDFSwTMS", "name" => "RyanBarclay / striper_snek"}, %{"body" => [%{"x" => 4, "y" => 6}, %{"x" => 4, "y" => 5}, %{"x" => 3, "y" => 5}, %{"x" => 3, "y" => 4}, %{"x" => 4, "y" => 4}], "health" => 90, "id" => "gs_3jMTSJGXRbtwCb9Y3wqdcC7S", "name" => "codeallthethingz / d1!"}], "width" => 11}, "game" => %{"id" => "8a0c8ac1-4a29-42b6-b61c-2439aca7c675"}, "turn" => 24, "you" => %{"body" => [%{"x" => 3, "y" => 7}, %{"x" => 2, "y" => 7}, %{"x" => 2, "y" => 8}, %{"x" => 3, "y" => 8}], "health" => 77, "id" => "gs_f7wXtgQWDXVbHd8XBjqxY8BX", "name" => "xtagon / Nagini"}}
+
+      %{"you" => you} = input
+      %{"you" => %{"body" => [head | _]}} = input
+
+      down = check_collision(you, step(head, "down"), you)
+
+      assert down.outcome == :free
+      assert down.probability == 0
+      assert down.value == 0
+    end
+
     test "should return slightly negative value for a draw collision" do
       input = %{"board" => %{"food" => [%{"x" => 4, "y" => 8}, %{"x" => 10, "y" => 1}, %{"x" => 10, "y" => 9}, %{"x" => 4, "y" => 1}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 2, "y" => 3}, %{"x" => 3, "y" => 3}, %{"x" => 3, "y" => 2}, %{"x" => 3, "y" => 1}], "health" => 98, "id" => "gs_k6RXbQjYMfRPQTmSgDbWRMtJ", "name" => "bvanvugt / (bra)dsnek"}, %{"body" => [%{"x" => 4, "y" => 9}, %{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 96, "id" => "gs_XqG9pDQwdxMk93GXHCrd6rjD", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 1, "y" => 0}, %{"x" => 2, "y" => 0}, %{"x" => 3, "y" => 0}], "health" => 95, "id" => "gs_8bpyDjtWjfxHgMVJx8pF8SVP", "name" => "otonnesen / Test Snake Please Ignore"}, %{"body" => [%{"x" => 5, "y" => 8}, %{"x" => 6, "y" => 8}, %{"x" => 7, "y" => 8}, %{"x" => 7, "y" => 9}], "health" => 98, "id" => "gs_qmbfHJqJxr3TcTqt9dwv6qVM", "name" => "Kjarrigan / Crystal Serpent"}], "width" => 11}, "game" => %{"id" => "55f089dc-38f8-409e-8b05-da94d8e8e9a9"}, "turn" => 5, "you" => %{"body" => [%{"x" => 4, "y" => 9}, %{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 96, "id" => "gs_XqG9pDQwdxMk93GXHCrd6rjD", "name" => "xtagon / Nagini"}}
 

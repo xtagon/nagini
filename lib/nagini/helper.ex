@@ -21,6 +21,9 @@ defmodule Nagini.Helper do
     you_are_other_snake = you["id"] == other_snake["id"] and you["body"] == other_snake["body"]
 
     direct_impact = other_snake["body"]
+    |> Enum.reject(fn body_part ->
+      you_are_other_snake and body_part == Enum.at(you["body"], -1)
+    end)
     |> Enum.any?(&(&1 == target))
 
     other_snake_head = other_snake["body"] |> Enum.at(0)
