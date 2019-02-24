@@ -25,4 +25,13 @@ defmodule Nagini.SolverTest do
       assert solution == "down"
     end
   end
+
+  describe "2019-02-24 game 8517bd31-f462-41f9-afee-07dd39c3aed9 turn 9" do
+    test "should move left because moving up has a 1/3 chance of fatal collision" do
+      input = %{"board" => %{"food" => [%{"x" => 4, "y" => 3}, %{"x" => 3, "y" => 9}, %{"x" => 1, "y" => 6}, %{"x" => 0, "y" => 0}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 7, "y" => 0}, %{"x" => 6, "y" => 0}, %{"x" => 5, "y" => 0}, %{"x" => 5, "y" => 1}], "health" => 95, "id" => "gs_PBQYqgFFRqYj9TH96Y3383Gc", "name" => "GregoryPotdevin / Mollusk v0"}, %{"body" => [%{"x" => 9, "y" => 8}, %{"x" => 9, "y" => 9}, %{"x" => 10, "y" => 9}], "health" => 91, "id" => "gs_b9X6wGW6JJt7CVPmqf6DCbVB", "name" => "matthewlehner / The Undersnaker pxu"}, %{"body" => [%{"x" => 5, "y" => 8}, %{"x" => 4, "y" => 8}, %{"x" => 3, "y" => 8}, %{"x" => 3, "y" => 7}], "health" => 96, "id" => "gs_x68Dbp3wK3TgDgG39bV4FMgX", "name" => "SamWheating / Arkantos"}, %{"body" => [%{"x" => 10, "y" => 3}, %{"x" => 10, "y" => 2}, %{"x" => 10, "y" => 1}], "health" => 91, "id" => "gs_WWxTfTMwQ6BRFjMMbfBMVx3D", "name" => "quinlanjager / Jager"}, %{"body" => [%{"x" => 7, "y" => 2}, %{"x" => 7, "y" => 3}, %{"x" => 7, "y" => 4}, %{"x" => 6, "y" => 4}], "health" => 93, "id" => "gs_hW4qpfGVQmkJPmjY67bKqFtS", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 8, "y" => 1}, %{"x" => 8, "y" => 2}, %{"x" => 8, "y" => 3}], "health" => 91, "id" => "gs_KGrCHTJxpHW3tSMr6hGT4yTC", "name" => "niclaswue / Danger Nudel"}, %{"body" => [%{"x" => 7, "y" => 8}, %{"x" => 7, "y" => 9}, %{"x" => 6, "y" => 9}, %{"x" => 5, "y" => 9}], "health" => 95, "id" => "gs_TvD4mbtjCW8JqxHHhHCmJPFY", "name" => "codeallthethingz / Unnamed Snake"}, %{"body" => [%{"x" => 0, "y" => 3}, %{"x" => 0, "y" => 2}, %{"x" => 0, "y" => 1}], "health" => 91, "id" => "gs_73RxKDQTJF6YYJqp3TdRyDdd", "name" => "codeallthethingz / d1!"}], "width" => 11}, "game" => %{"id" => "8517bd31-f462-41f9-afee-07dd39c3aed9"}, "turn" => 9, "you" => %{"body" => [%{"x" => 7, "y" => 2}, %{"x" => 7, "y" => 3}, %{"x" => 7, "y" => 4}, %{"x" => 6, "y" => 4}], "health" => 93, "id" => "gs_hW4qpfGVQmkJPmjY67bKqFtS", "name" => "xtagon / Nagini"}}
+
+      solution = solve(input, @move_timeout)
+      assert solution == "left"
+    end
+  end
 end

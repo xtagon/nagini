@@ -89,11 +89,17 @@ defmodule Nagini.Helper do
     if length(collisions) > 0 do
       Logger.debug("Move to #{inspect(target)} would have the following collisions: #{inspect(collisions)}")
 
+      worst_collision = Enum.sort_by(collisions, &(&1.value)) |> Enum.at(0)
+
       average_value = Enum.reduce(collisions, 0, fn %{value: value}, sum ->
         sum + value
       end) / length(collisions)
 
-      average_value
+      if worst_collision[:value] <= 0 do
+        worst_collision.value
+      else
+        average_value
+      end
     else
       Logger.debug("Moving #{direction} to #{inspect(target)} would have no collisions.")
       0
