@@ -51,17 +51,17 @@ defmodule Nagini.Solver do
 
     target = step(head, move)
 
-    probability_of_collision = if out_of_bounds?(input, target) do
+    collision_avoidance = if out_of_bounds?(input, target) do
       Logger.debug("Moving #{move} would result in wall collision")
-      1
+      -1
     else
-      probability = probability_of_collision_with_snake(input, target)
-      Logger.debug("Probability that moving #{move} would result in a snake collision is #{inspect(probability)}")
-      probability
+      value = value_of_collision_with_snake(input, target, move)
+      Logger.debug("Value of moving #{move} is predicted to be #{inspect(value)}")
+      value
     end
 
     %{
-      collision_avoidance: -1 * probability_of_collision,
+      collision_avoidance: collision_avoidance,
       food_seeking: probability_of_eating_food(input, target)
     }
   end

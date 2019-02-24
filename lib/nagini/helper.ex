@@ -17,42 +17,83 @@ defmodule Nagini.Helper do
 
   def out_of_bounds?(_state, _target), do: false
 
-  def probability_of_collision_with_snake(%{
-    "board" => %{"snakes" => snakes},
-    "you" => you
-  }, target) do
-    definitely = snakes
-    |> Enum.flat_map(&(&1["body"]))
+  def check_collision(you, target, other_snake) do
+    you_are_other_snake = you["id"] == other_snake["id"] and you["body"] == other_snake["body"]
+
+    direct_impact = other_snake["body"]
     |> Enum.any?(&(&1 == target))
 
-    if definitely do
+    other_snake_head = other_snake["body"] |> Enum.at(0)
+    possible_head_to_head = (not you_are_other_snake) and adjascent?(other_snake_head, target)
+
+    # TODO: Check to see if it's an impact with the tail, and predict whether
+    # the tail will still be there.
+    probability = if direct_impact do
       1
     else
-      other_snakes = snakes
-      |> Enum.reject(&(&1["id"] == you["id"] && &1["body"] == you["body"]))
-
-      snakes_that_could_collide = other_snakes
-      |> Enum.filter(&(adjascent?(head_of_snake(&1), target)))
-
-      number_of_snakes_that_could_collide = length(snakes_that_could_collide)
-
-      Logger.debug("Number of snakes that could choose to collide: #{inspect(number_of_snakes_that_could_collide)}")
-
-      snake_names = snakes_that_could_collide
-      |> Enum.map(&(&1["name"]))
-
-      Logger.debug("Snakes that could choose to collide: #{inspect(snake_names)}")
-
-      case number_of_snakes_that_could_collide do
-        0 ->
-          Logger.debug("No snakes could collide")
-          0
-        _ ->
-          # TODO: This should predict whether the snake is likely to move there, not just the blind chance
-          # 1/3 just means that the snake must make one of 3 possible moves (assuming it wouldn't move into itself behind its head)
-          Logger.debug("There is a 1 in 3 chance that another snake will collide")
-          1/3
+      if possible_head_to_head do
+        # Assume opponent has a 1 in 3 oppurtunity to collide head to head
+        # TODO: Make a smarter prediction of what the other snake will choose
+        1/3
+      else
+        0
       end
+    end
+
+    outcome = if direct_impact do
+      :lose
+    else
+      if possible_head_to_head do
+        if length(other_snake["body"]) == length(you["body"]) do
+          :draw
+        else
+          if length(other_snake["body"]) < length(you["body"]) do
+            :win
+          else
+            :lose
+          end
+        end
+      else
+        :free
+      end
+    end
+
+    weight = case outcome do
+      :win -> 1
+      :draw -> 0.5
+      :free -> 0
+      :lose -> -1
+    end
+
+    value = weight * probability
+
+    %{
+      other_snake: %{name: other_snake["name"], id: other_snake["id"]},
+      outcome: outcome,
+      value: value,
+      probability: probability
+    }
+  end
+
+  def value_of_collision_with_snake(%{
+    "board" => %{"snakes" => snakes},
+    "you" => you
+  }, target, direction) do
+    collisions = snakes
+    |> Enum.map(&(check_collision(you, target, &1)))
+    |> Enum.reject(&(&1.outcome == :free))
+
+    if length(collisions) > 0 do
+      Logger.debug("Move to #{inspect(target)} would have the following collisions: #{inspect(collisions)}")
+
+      average_value = Enum.reduce(collisions, 0, fn %{value: value}, sum ->
+        sum + value
+      end) / length(collisions)
+
+      average_value
+    else
+      Logger.debug("Moving #{direction} to #{inspect(target)} would have no collisions.")
+      0
     end
   end
 
@@ -83,8 +124,7 @@ defmodule Nagini.Helper do
   end
 
   def adjascent?(a, b) do
-    (a["x"] == b["x"] and abs(a["y"] - b["y"]) == 1) or
-    (a["y"] == b["y"] and abs(a["x"] - b["x"]) == 1)
+    result = (a["x"] == b["x"] and abs(a["y"] - b["y"]) == 1) or (a["y"] == b["y"] and abs(a["x"] - b["x"]) == 1)
   end
 
   def head_of_snake(%{"body" => [head | _]}), do: head
