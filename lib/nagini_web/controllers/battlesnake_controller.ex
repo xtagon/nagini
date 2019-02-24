@@ -5,18 +5,21 @@ defmodule NaginiWeb.BattlesnakeController do
 
   @config Application.get_env(:nagini, :battlesnake)
 
-  def start(conn, _params), do: json(conn, %{color: color()})
-  def _end(_conn, _params), do: :empty_ok
-  def ping(_conn, _params), do: :empty_ok
+  def start(conn, _params) do
+    json(conn, %{
+      color: @config[:color],
+      headType: @config[:head_type],
+      tailType: @config[:tail_type]
+    })
+  end
 
   def move(conn, params) do
     move = Nagini.Solver.solve(params, timeout())
     json(conn, %{move: move})
   end
 
-  defp color do
-    @config[:color]
-  end
+  def _end(_conn, _params), do: :empty_ok
+  def ping(_conn, _params), do: :empty_ok
 
   defp timeout do
     case @config[:timeout] do
