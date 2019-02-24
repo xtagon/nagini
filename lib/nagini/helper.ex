@@ -127,7 +127,7 @@ defmodule Nagini.Helper do
   end
 
   def adjascent?(a, b) do
-    result = (a["x"] == b["x"] and abs(a["y"] - b["y"]) == 1) or (a["y"] == b["y"] and abs(a["x"] - b["x"]) == 1)
+    (a["x"] == b["x"] and abs(a["y"] - b["y"]) == 1) or (a["y"] == b["y"] and abs(a["x"] - b["x"]) == 1)
   end
 
   def head_of_snake(%{"body" => [head | _]}), do: head
