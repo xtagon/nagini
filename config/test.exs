@@ -6,5 +6,4 @@ config :nagini, NaginiWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-# Print only everything during test (it's useful for now)
-config :logger, level: :debug
+config :logger, level: :error
