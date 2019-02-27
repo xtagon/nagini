@@ -1,4 +1,21 @@
 defmodule Nagini.Analytics do
+  @environment Mix.env
+
+  @release Mix.Project.config[:version]
+
+  @revision(try do
+    {hash, _} = System.cmd("git", ["rev-parse", "HEAD"])
+    String.trim(hash)
+  rescue
+    _ -> nil
+  end)
+
+  @metadata %{
+    "environment" => @environment,
+    "release" => @release,
+    "revision" => @revision
+  }
+
   alias Nagini.Analytics.{
     ReceiveGameStart,
     ReceiveGameMove,
