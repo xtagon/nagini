@@ -28,7 +28,12 @@ defmodule Nagini.Analytics do
     command = build_command(route, game_id, params)
 
     # Async dispatch helps a lot to keep the response latency low!
-    Task.async(fn -> Router.dispatch(command) end)
+    #
+    # TODO: Register a GenServer as a worker and cast to that that instead of
+    # creating task per command dispatch
+    Task.async(fn ->
+      Router.dispatch(command, metadata: @metadata)
+    end)
 
     :ok
   end
