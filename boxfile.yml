@@ -12,7 +12,7 @@ run.config:
 deploy.config:
   before_live:
     web.main:
-      - mix do event_store.create, event_store.init
+      - mix event_store.init
 
 web.main:
   start: node-start mix phx.server
