@@ -7,3 +7,15 @@ config :nagini, NaginiWeb.Endpoint,
   server: false
 
 config :logger, level: :error
+
+config :eventstore, EventStore.Storage,
+  serializer: Commanded.Serialization.JsonSerializer,
+  username: System.get_env("DATA_EVENT_STORE_USER"),
+  password: System.get_env("DATA_EVENT_STORE_PASS"),
+  hostname: System.get_env("DATA_EVENT_STORE_HOST"),
+  database: "gonano",
+  pool_size: 10
+
+config :commanded, event_store_adapter: Commanded.EventStore.Adapters.InMemory
+
+config :commanded, Commanded.EventStore.Adapters.InMemory, serializer: Commanded.Serialization.JsonSerializer

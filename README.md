@@ -7,6 +7,7 @@ Nagini is a snake who battles at: http://battlesnake.io
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
+  * Set up the event store with `mix do event_store.create, event_store.init`
   * Start Phoenix endpoint with `mix phx.server`
 
 Now you can use [`localhost:4000`](http://localhost:4000) as a Battlesnake
@@ -61,6 +62,11 @@ To read the Nanobox server logs:
 
   * `nanobox console app-name web.main`
   * `tail -f /tmp/nagini.log`
+
+## PSQL Usage for Nanobox Local
+
+  * Find IP and password with `nanobox info local`
+  * `PGPASSWORD="" psql -h IP -p 5432 -U nanobox gonano`
 
 ## License
 

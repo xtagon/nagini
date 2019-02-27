@@ -7,8 +7,16 @@ run.config:
     - inotify-tools
   fs_watch: true
 
+deploy.config:
+  before_live:
+    web.main:
+      - mix do event_store.create, event_store.init
+
 web.main:
   start: node-start mix phx.server
   writable_dirs:
     # Fixes this error: ** (File.Error) could not write to file "/app/_build/prod/lib/app-name/priv": permission denied
     - _build
+
+data.event_store:
+  image: nanobox/postgresql:9.6

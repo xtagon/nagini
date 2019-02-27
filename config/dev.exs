@@ -48,3 +48,13 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :appsignal, :config, active: true
+
+config :commanded, event_store_adapter: Commanded.EventStore.Adapters.EventStore
+
+config :eventstore, EventStore.Storage,
+  serializer: Nagini.Analytics.MsgpaxSerializer,
+  username: System.get_env("DATA_EVENT_STORE_USER"),
+  password: System.get_env("DATA_EVENT_STORE_PASS"),
+  hostname: System.get_env("DATA_EVENT_STORE_HOST"),
+  database: "gonano",
+  pool_size: 10
