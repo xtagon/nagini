@@ -1,12 +1,20 @@
 defmodule Nagini.Analytics.GameWorldUpdated do
-  @derive Jason.Encoder
-  defstruct [:game_id, :world]
+  @fields [:game_id, :world]
+  @derive [
+    {Msgpax.Packer, fields: @fields},
+    {Jason.Encoder, only: @fields}
+  ]
+  defstruct @fields
 
-  def to_map(%__MODULE__{game_id: game_id, world: world}) do
-    %{"game_id" => game_id, "world" => world}
-  end
+  alias Nagini.World
 
-  def from_map(%{"game_id" => game_id, "world" => world}) do
-    %__MODULE__{game_id: game_id, world: world}
+  def new(%{
+    "game_id" => game_id,
+    "world" => world
+  }) do
+    %__MODULE__{
+      game_id: game_id,
+      world: World.new(world)
+    }
   end
 end

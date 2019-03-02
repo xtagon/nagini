@@ -4,7 +4,7 @@ defmodule Nagini.MixProject do
   def project do
     [
       app: :nagini,
-      version: "0.4.2",
+      version: "0.4.3",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -29,7 +29,7 @@ defmodule Nagini.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support", "test/fixtures"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.

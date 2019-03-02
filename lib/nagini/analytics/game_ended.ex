@@ -1,12 +1,12 @@
 defmodule Nagini.Analytics.GameEnded do
-  @derive Jason.Encoder
-  defstruct [:game_id]
+  @fields [:game_id]
+  @derive [
+    {Msgpax.Packer, fields: @fields},
+    {Jason.Encoder, only: @fields}
+  ]
+  defstruct @fields
 
-  def to_map(%__MODULE__{game_id: game_id}) do
-    %{"game_id" => game_id}
-  end
-
-  def from_map(%{"game_id" => game_id}) do
+  def new(%{"game_id" => game_id}) do
     %__MODULE__{game_id: game_id}
   end
 end

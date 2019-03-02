@@ -1,14 +1,15 @@
 defmodule NaginiWeb.BattlesnakeController do
   use NaginiWeb, :controller
 
-  alias Nagini.Analytics
+  alias Nagini.{World,Analytics}
 
   action_fallback NaginiWeb.FallbackController
 
   @config Application.get_env(:nagini, :battlesnake)
 
   def start(conn, params) do
-    Analytics.dispatch(:start, params)
+    world = World.new(params)
+    Analytics.dispatch(:start, world)
     json(conn, %{
       color: @config[:color],
       headType: @config[:head_type],
@@ -17,13 +18,15 @@ defmodule NaginiWeb.BattlesnakeController do
   end
 
   def move(conn, params) do
-    Analytics.dispatch(:move, params)
-    move = Nagini.Solver.solve(params, timeout())
+    world = World.new(params)
+    Analytics.dispatch(:move, world)
+    move = Nagini.Solver.solve(world, timeout())
     json(conn, %{move: move})
   end
 
   def _end(_conn, params) do
-    Analytics.dispatch(:end, params)
+    world = World.new(params)
+    Analytics.dispatch(:end, world)
     :empty_ok
   end
 

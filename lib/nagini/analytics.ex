@@ -16,6 +16,7 @@ defmodule Nagini.Analytics do
     "revision" => @revision
   }
 
+  alias Nagini.World
   alias Nagini.Analytics.{
     ReceiveGameStart,
     ReceiveGameMove,
@@ -23,9 +24,9 @@ defmodule Nagini.Analytics do
     Router
   }
 
-  def dispatch(route, %{"game" => %{"id" => game_id}} = params)
-  when route in [:start, :move, :end] do
-    command = build_command(route, game_id, params)
+  def dispatch(action, %World{game_id: game_id} = world)
+  when action in [:start, :move, :end] do
+    command = build_command(action, game_id, world)
 
     # Async dispatch helps a lot to keep the response latency low!
     #
@@ -38,15 +39,15 @@ defmodule Nagini.Analytics do
     :ok
   end
 
-  defp build_command(:start, game_id, params) do
-    %ReceiveGameStart{game_id: game_id, world: params}
+  defp build_command(:start, game_id, world) do
+    %ReceiveGameStart{game_id: game_id, world: world}
   end
 
-  defp build_command(:move, game_id, params) do
-    %ReceiveGameMove{game_id: game_id, world: params}
+  defp build_command(:move, game_id, world) do
+    %ReceiveGameMove{game_id: game_id, world: world}
   end
 
-  defp build_command(:end, game_id, params) do
-    %ReceiveGameEnd{game_id: game_id, world: params}
+  defp build_command(:end, game_id, world) do
+    %ReceiveGameEnd{game_id: game_id, world: world}
   end
 end

@@ -1,32 +1,43 @@
 defmodule Nagini.Helper do
   require Logger
 
-  def step(%{"x" => x, "y" => y},    "up"), do: %{"x" => x, "y" => y - 1}
-  def step(%{"x" => x, "y" => y},  "down"), do: %{"x" => x, "y" => y + 1}
-  def step(%{"x" => x, "y" => y},  "left"), do: %{"x" => x - 1, "y" => y}
-  def step(%{"x" => x, "y" => y}, "right"), do: %{"x" => x + 1, "y" => y}
+  alias Nagini.World
+  alias Nagini.World.{Board,Snake,Coord}
 
-  def out_of_bounds?(_state, %{"y" => y}) when y < 0, do: true
-  def out_of_bounds?(_state, %{"x" => x}) when x < 0, do: true
+  def step(%World{you: you}, direction) do
+    step(you, direction)
+  end
 
-  def out_of_bounds?(%{"board" => %{"height" => h}}, %{"y" => y})
+  def step(%Snake{body: [head | _]}, direction) do
+    step(head, direction)
+  end
+
+  def step(%Coord{x: x, y: y},    "up"), do: %Coord{x: x, y: y - 1}
+  def step(%Coord{x: x, y: y},  "down"), do: %Coord{x: x, y: y + 1}
+  def step(%Coord{x: x, y: y},  "left"), do: %Coord{x: x - 1, y: y}
+  def step(%Coord{x: x, y: y}, "right"), do: %Coord{x: x + 1, y: y}
+
+  def out_of_bounds?(_world, %Coord{y: y}) when y < 0, do: true
+  def out_of_bounds?(_world, %Coord{x: x}) when x < 0, do: true
+
+  def out_of_bounds?(%World{board: %Board{height: h}}, %Coord{y: y})
   when y >= h, do: true
 
-  def out_of_bounds?(%{"board" => %{"width" => w}}, %{"x" => x})
+  def out_of_bounds?(%World{board: %Board{width: w}}, %Coord{x: x})
   when x >= w, do: true
 
-  def out_of_bounds?(_state, _target), do: false
+  def out_of_bounds?(_world, _coord), do: false
 
   def check_collision(you, target, other_snake) do
-    you_are_other_snake = you["id"] == other_snake["id"] and you["body"] == other_snake["body"]
+    you_are_other_snake = you.id == other_snake.id and you.body == other_snake.body
 
-    direct_impact = other_snake["body"]
+    direct_impact = other_snake.body
     |> Enum.reject(fn body_part ->
-      body_part == Enum.at(other_snake["body"], -1) and body_part != Enum.at(other_snake["body"], -2)
+      body_part == Enum.at(other_snake.body, -1) and body_part != Enum.at(other_snake.body, -2)
     end)
     |> Enum.any?(&(&1 == target))
 
-    other_snake_head = other_snake["body"] |> Enum.at(0)
+    other_snake_head = other_snake.body |> Enum.at(0)
     possible_head_to_head = (not you_are_other_snake) and adjascent?(other_snake_head, target)
 
     # TODO: Check to see if it's an impact with the tail, and predict whether
@@ -47,10 +58,10 @@ defmodule Nagini.Helper do
       :lose
     else
       if possible_head_to_head do
-        if length(other_snake["body"]) == length(you["body"]) do
+        if length(other_snake.body) == length(you.body) do
           :draw
         else
-          if length(other_snake["body"]) < length(you["body"]) do
+          if length(other_snake.body) < length(you.body) do
             :win
           else
             :lose
@@ -71,16 +82,16 @@ defmodule Nagini.Helper do
     value = weight * probability
 
     %{
-      other_snake: %{name: other_snake["name"], id: other_snake["id"]},
+      other_snake: %{name: other_snake.name, id: other_snake.name},
       outcome: outcome,
       value: value,
       probability: probability
     }
   end
 
-  def value_of_collision_with_snake(%{
-    "board" => %{"snakes" => snakes},
-    "you" => you
+  def value_of_collision_with_snake(%World{
+    board: %Board{snakes: snakes},
+    you: you
   }, target, direction) do
     collisions = snakes
     |> Enum.map(&(check_collision(you, target, &1)))
@@ -106,8 +117,8 @@ defmodule Nagini.Helper do
     end
   end
 
-  def probability_of_eating_food(%{
-    "board" => %{"food" => food}
+  def probability_of_eating_food(%World{
+    board: %Board{food: food}
   }, target) do
     nearest_food_distance = food
     |> Enum.map(&(manhattan_distance(&1, target)))
@@ -126,15 +137,11 @@ defmodule Nagini.Helper do
     end
   end
 
-  def manhattan_distance(a, b) do
-    x_distance = abs(a["x"] - b["x"])
-    y_distance = abs(a["y"] - b["y"])
-    x_distance + y_distance
+  def manhattan_distance(%Coord{x: ax, y: ay}, %Coord{x: bx, y: by}) do
+    abs(ax - bx) + abs(ay - by)
   end
 
-  def adjascent?(a, b) do
-    (a["x"] == b["x"] and abs(a["y"] - b["y"]) == 1) or (a["y"] == b["y"] and abs(a["x"] - b["x"]) == 1)
+  def adjascent?(%Coord{x: ax, y: ay}, %Coord{x: bx, y: by}) do
+    (ax == bx and abs(ay - by) == 1) or (ay == by and abs(ax - bx) == 1)
   end
-
-  def head_of_snake(%{"body" => [head | _]}), do: head
 end
