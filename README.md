@@ -68,6 +68,13 @@ To read the Nanobox server logs:
   * Find IP and password with `nanobox info local`
   * `PGPASSWORD="" psql -h IP -p 5432 -U nanobox gonano`
 
+## PSQL Usage for Nanobox Remote
+
+  * Start the tunnel with `nanobox tunnel data.event_store -p 5432`
+  * Find the password from Nanobox dashboard
+  * `psql -p 5432 -h 127.0.0.1 gonano nanobox`
+  * Enter the password`
+
 ## License
 
 Copyright 2019 Justin Workman. All Rights Reserved.
