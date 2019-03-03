@@ -34,3 +34,8 @@ nagini-*.tar
 # secrets files as long as you replace their contents by environment
 # variables.
 /config/*.secret.exs
+
+# The package-lock.json file in the root directory is not important, the
+# package-lock.json only exists as a placeholder to prefix to the one under
+# /admin
+/package-lock.json

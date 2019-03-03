@@ -5,6 +5,17 @@ defmodule NaginiWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :put_secure_browser_headers
+  end
+
+  scope "/admin", NaginiWeb do
+    pipe_through :browser
+
+    get "/*path", AdminController, :index
+  end
+
   scope "/", NaginiWeb do
     pipe_through :api
 

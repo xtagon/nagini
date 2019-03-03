@@ -14,7 +14,7 @@ defmodule NaginiWeb.Endpoint do
     at: "/",
     from: :nagini,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(admin)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -41,5 +41,6 @@ defmodule NaginiWeb.Endpoint do
     key: "_nagini_key",
     signing_salt: "F1gAGcQ3"
 
+  plug NaginiWeb.Redirector
   plug NaginiWeb.Router
 end
