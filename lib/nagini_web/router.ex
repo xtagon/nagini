@@ -8,6 +8,7 @@ defmodule NaginiWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :put_secure_browser_headers
+    plug BasicAuth, use_config: {:nagini, :basic_auth}
   end
 
   scope "/admin", NaginiWeb do

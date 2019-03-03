@@ -44,6 +44,7 @@ intended.
 Test with a dry-run first:
 
   * `nanobox evar add dry-run PORT=8080 MIX_ENV=prod EMBER_ENV=production`
+  * `nanobox evar add dry-run ADMIN_USER=fixme ADMIN_PASS=fixme`
   * `nanobox evar add dry-run APPSIGNAL_APP_NAME="Nagini" APPSIGNAL_APP_ENV="dry-run" APPSIGNAL_PUSH_API_KEY="FIXME"`
   * `nanobox deploy dry-run`
   * Test the dry-run deployed endpoint
@@ -56,6 +57,7 @@ Deploy:
 
   * `nanobox remote add app-name`
   * `nanobox evar add app-name PORT=8080 MIX_ENV=prod EMBER_ENV=production`
+  * `nanobox evar add app-name ADMIN_USER=fixme ADMIN_PASS=fixme`
   * `nanobox evar add app-name APPSIGNAL_APP_NAME="Nagini" APPSIGNAL_APP_ENV="prod" APPSIGNAL_PUSH_API_KEY="FIXME"`
   * `nanobox deploy`
 
