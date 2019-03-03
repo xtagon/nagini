@@ -23,9 +23,9 @@ To start your Ember admin frontend:
 
   * Change to the frontend directory with `cd admin`
   * Install dependencies with `npm install`
-  * Start Ember with `ember serve`
+  * Start Ember with `./node_modules/.bin/ember serve`
 
-Now you can view [`localhost:4200`](http://localhost:4200)
+Now you can view [`localhost:4200/admin/`](http://localhost:4200/admin/)
 
 ## Development with Nanobox
 
