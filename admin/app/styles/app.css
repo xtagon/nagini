@@ -3,6 +3,7 @@
   position: relative; /* Needed for heatmap.js to fit */
   width: 400px;
   height: 400px;
+  background-color: transparent;
 }
 
 .board-grid {
@@ -15,8 +16,11 @@
 
 .board-grid-cell {
   font-size: 8pt;
-  background-color: #f4f4f4;
-  border: 1px solid white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.board-grid-cell:hover {
+  border: 1px solid black;
 }
 
 .grid {

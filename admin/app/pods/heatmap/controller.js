@@ -24,5 +24,13 @@ export default Controller.extend({
     return world;
   }),
 
-  invalidWorldJson: equal("parsedWorld", false)
+  invalidWorldJson: equal("parsedWorld", false),
+
+  focusedPoint: null,
+
+  actions: {
+    setFocusedPoint(point) {
+      this.set("focusedPoint", point);
+    }
+  }
 });

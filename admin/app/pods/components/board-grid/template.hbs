@@ -1,0 +1,7 @@
+{{#each (repeat height) as |_ y|}}
+  <div class="grid-row">
+    {{#each (repeat width) as |_ x|}}
+      {{board-cell onHover=(action "hoverCell" x y)}}
+    {{/each}}
+  </div>
+{{/each}}

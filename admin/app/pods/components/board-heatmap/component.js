@@ -10,7 +10,7 @@ const defaultWidth = 11;
 const defaultHeight = 11;
 
 const config = {
-  radius: 40,
+  radius: 30,
   minOpacity: 0,
   maxOpacity: 1,
   blur: .75
@@ -25,19 +25,50 @@ export default Component.extend({
   height: or("world.board.height", "defaultHeight"),
   defaultWidth,
   defaultHeight,
+  onHoverCell: null,
 
-  data: computed("world", function() {
+  points: computed("world", function() {
     const world = this.get("world");
     if (!world) return [];
 
     const points = world.board.snakes.flatMap(({body}) => {
       return body.map(({x, y}) => {
-        x = (x + 0.5) / world.board.width * canvasSize;
-        y = (y + 0.5) / world.board.height * canvasSize;
         return {x, y, value: 1.0};
       });
     });
 
     return points;
   }),
+
+  heatmapPoints: computed("points", "width", "height", function() {
+    const width = this.get("width");
+    const height = this.get("height");
+
+    let points = this.get("points") || [];
+
+    points = points.map(({x, y, value}) => {
+      x = (x + 0.5) / width * canvasSize;
+      y = (y + 0.5) / height * canvasSize;
+      return {x, y, value};
+    });
+
+    return points;
+  }),
+
+  actions: {
+    setFocusedPoint(x, y) {
+      const onHoverCell = this.get("onHoverCell");
+
+      if (x && y && onHoverCell) {
+        const points = this.get("points");
+        const focusedPoint = points.find(point => point.x === x && point.y === y);
+
+        if (focusedPoint) {
+          onHoverCell(focusedPoint);
+        } else {
+          onHoverCell({x, y, value: 0});
+        }
+      }
+    }
+  }
 });

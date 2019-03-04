@@ -1,6 +1,11 @@
 <h2>Heatmap</h2>
 
-{{board-heatmap world=world}}
+{{board-heatmap world=world onHoverCell=(action "setFocusedPoint")}}
+
+{{#with focusedPoint as |point|}}
+  <p><b>Position:</b> ({{point.x}}, {{point.y}})</p>
+  <p><b>Value:</b> {{point.value}}</p>
+{{/with}}
 
 <h3>JSON Input</h3>
 
