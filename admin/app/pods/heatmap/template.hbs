@@ -1,3 +1,13 @@
 <h2>Heatmap</h2>
 
 {{board-heatmap world=world}}
+
+<h3>JSON Input</h3>
+
+{{#if invalidWorldJson}}
+  <p>Invalid JSON.</p>
+{{/if}}
+
+<p>
+  {{textarea value=worldJson cols="60" rows="8"}}
+</p>
