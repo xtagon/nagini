@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import { computed } from '@ember/object';
 import { or } from '@ember/object/computed';
+import { isPresent } from '@ember/utils';
 
 // This needs to match the fixed size of the canvas element (width and height
 // should be the same)
@@ -59,7 +60,7 @@ export default Component.extend({
     setFocusedPoint(x, y) {
       const onHoverCell = this.get("onHoverCell");
 
-      if (x && y && onHoverCell) {
+      if (isPresent(x) && isPresent(y) && onHoverCell) {
         const points = this.get("points");
         const focusedPoint = points.find(point => point.x === x && point.y === y);
 
