@@ -3,6 +3,7 @@
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'nagini-admin',
+    podModulePrefix: 'nagini-admin/pods',
     environment,
     rootURL: 'admin',
     locationType: 'auto',

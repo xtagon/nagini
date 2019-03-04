@@ -1,0 +1,11 @@
+<div class="board-grid grid">
+  {{#each (repeat height)}}
+    <div class="grid-row">
+      {{#each (repeat width)}}
+        <div class="board-grid-cell grid-cell"></div>
+      {{/each}}
+    </div>
+  {{/each}}
+</div>
+
+{{ember-heatmap config=config data=data max=1}}
