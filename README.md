@@ -81,6 +81,14 @@ To read the Nanobox server logs:
   * `nanobox console app-name web.main`
   * `tail -f /tmp/nagini.log`
 
+## IEx Console for Nanobox Remote
+
+  * `nanobox console app-name web.main`
+  * `iex -S mix phx.server --no-start`
+
+The `--no-start` option prevents the normal applications from being started
+because that would throw errors such as the port being in use.
+
 ## PSQL Usage for Nanobox Local
 
   * Find IP and password with `nanobox info local`
