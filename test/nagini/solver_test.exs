@@ -26,8 +26,12 @@ defmodule Nagini.SolverTest do
       world = %{"board" => %{"food" => [%{"x" => 7, "y" => 9}, %{"x" => 7, "y" => 10}, %{"x" => 9, "y" => 7}], "height" => 11, "snakes" => [%{"body" => [%{"x" => 0, "y" => 10}, %{"x" => 1, "y" => 10}, %{"x" => 1, "y" => 9}, %{"x" => 0, "y" => 9}], "health" => 79, "id" => "gs_DhYtQhcYhxTRThbdb9CSgbgK", "name" => "codeallthethingz / JamJan"}, %{"body" => [%{"x" => 4, "y" => 10}, %{"x" => 3, "y" => 10}, %{"x" => 2, "y" => 10}], "health" => 76, "id" => "gs_GjVPtyw6SDg6MWjG9q3kf7fV", "name" => "PhoenixProgrammer / PhoenixProgramming"}, %{"body" => [%{"x" => 3, "y" => 7}, %{"x" => 2, "y" => 7}, %{"x" => 2, "y" => 8}, %{"x" => 3, "y" => 8}], "health" => 77, "id" => "gs_f7wXtgQWDXVbHd8XBjqxY8BX", "name" => "xtagon / Nagini"}, %{"body" => [%{"x" => 0, "y" => 6}, %{"x" => 0, "y" => 5}, %{"x" => 0, "y" => 4}, %{"x" => 1, "y" => 4}, %{"x" => 1, "y" => 5}, %{"x" => 2, "y" => 5}, %{"x" => 2, "y" => 6}], "health" => 92, "id" => "gs_FwCRPcWFYDJJWhhCvDFSwTMS", "name" => "RyanBarclay / striper_snek"}, %{"body" => [%{"x" => 4, "y" => 6}, %{"x" => 4, "y" => 5}, %{"x" => 3, "y" => 5}, %{"x" => 3, "y" => 4}, %{"x" => 4, "y" => 4}], "health" => 90, "id" => "gs_3jMTSJGXRbtwCb9Y3wqdcC7S", "name" => "codeallthethingz / d1!"}], "width" => 11}, "game" => %{"id" => "8a0c8ac1-4a29-42b6-b61c-2439aca7c675"}, "turn" => 24, "you" => %{"body" => [%{"x" => 3, "y" => 7}, %{"x" => 2, "y" => 7}, %{"x" => 2, "y" => 8}, %{"x" => 3, "y" => 8}], "health" => 77, "id" => "gs_f7wXtgQWDXVbHd8XBjqxY8BX", "name" => "xtagon / Nagini"}}
       |> World.new
 
-      solution = solve(world, @move_timeout)
-      assert solution == "down"
+      # Try it at different max depths, because a regression showed up before
+      # where it was solved with a max depth of 0 but failed with a max depth of
+      # 1 or greater because the future predictions weren't considering eating
+      assert "down" == solve(world, @move_timeout, 0)
+      assert "down" == solve(world, @move_timeout, 1)
+      assert "down" == solve(world, @move_timeout, 2)
     end
   end
 
@@ -58,6 +62,31 @@ defmodule Nagini.SolverTest do
 
       solution = solve(world, @move_timeout)
       assert solution == "down"
+    end
+  end
+
+  describe "2019-03-04 game e7fb9e8b-bfbc-448e-96fd-7bd5539b297a turn 9" do
+    test "should move right because all other directions are out of bounds or collide with self" do
+      world = %{"board" => %{"food" => [%{"x" => 5, "y" => 5}, %{"x" => 3, "y" => 0}], "height" => 6, "snakes" => [%{"body" => [%{"x" => 0, "y" => 0}, %{"x" => 0, "y" => 1}, %{"x" => 0, "y" => 2}, %{"x" => 1, "y" => 2}], "health" => 93, "id" => "b43cfb5d-150a-48fd-96d7-6efc53b4538c", "name" => "Local 1"}, %{"body" => [%{"x" => 0, "y" => 4}, %{"x" => 0, "y" => 3}, %{"x" => 1, "y" => 3}, %{"x" => 2, "y" => 3}, %{"x" => 2, "y" => 4}, %{"x" => 2, "y" => 4}], "health" => 100, "id" => "d1d1d9ad-6c50-44ad-82d9-3fcc77f58f84", "name" => "Local 2"}], "width" => 6}, "game" => %{"id" => "e7fb9e8b-bfbc-448e-96fd-7bd5539b297a"}, "turn" => 9, "you" => %{"body" => [%{"x" => 0, "y" => 0}, %{"x" => 0, "y" => 1}, %{"x" => 0, "y" => 2}, %{"x" => 1, "y" => 2}], "health" => 93, "id" => "b43cfb5d-150a-48fd-96d7-6efc53b4538c", "name" => "Local 1"}}
+      |> World.new
+
+      assert "right" == solve(world, @move_timeout, _max_depth = 0)
+      assert "right" == solve(world, @move_timeout, _max_depth = 1)
+      assert "right" == solve(world, @move_timeout, _max_depth = 2)
+    end
+  end
+
+  describe "2019-03-04 game 10bc28b8-6f28-4e94-a85c-189f63c7bf65 turn 25" do
+    test "should move up because moving down leads to entrapment" do
+      world = %{"board" => %{"food" => [%{"x" => 2, "y" => 0}, %{"x" => 2, "y" => 4}], "height" => 6, "snakes" => [%{"body" => [%{"x" => 4, "y" => 1}, %{"x" => 4, "y" => 2}, %{"x" => 4, "y" => 3}, %{"x" => 4, "y" => 4}, %{"x" => 4, "y" => 5}, %{"x" => 3, "y" => 5}, %{"x" => 3, "y" => 4}, %{"x" => 3, "y" => 3}, %{"x" => 3, "y" => 2}, %{"x" => 3, "y" => 1}], "health" => 99, "id" => "be7a16b5-be59-4bae-8680-4f916008948f", "name" => "Local 1"}, %{"body" => [%{"x" => 2, "y" => 3}, %{"x" => 1, "y" => 3}, %{"x" => 1, "y" => 4}, %{"x" => 1, "y" => 5}, %{"x" => 0, "y" => 5}, %{"x" => 0, "y" => 4}, %{"x" => 0, "y" => 3}], "health" => 92, "id" => "24d6cb88-6222-4348-bfba-101a1d947172", "name" => "Local 2"}], "width" => 6}, "game" => %{"id" => "10bc28b8-6f28-4e94-a85c-189f63c7bf65"}, "turn" => 25, "you" => %{"body" => [%{"x" => 2, "y" => 3}, %{"x" => 1, "y" => 3}, %{"x" => 1, "y" => 4}, %{"x" => 1, "y" => 5}, %{"x" => 0, "y" => 5}, %{"x" => 0, "y" => 4}, %{"x" => 0, "y" => 3}], "health" => 92, "id" => "24d6cb88-6222-4348-bfba-101a1d947172", "name" => "Local 2"}}
+      |> World.new
+
+      # Not expected to solve it with a depth lower than 2, but depth 2 should
+      # solve it and depth 3 should still solve it. When this test was added,
+      # depth 2 solved it but depth 3 was having trouble because it wouldn't
+      # give up after dying and kept trying to add phantom solutions.
+      assert "up" == solve(world, @move_timeout, _max_depth = 2)
+      assert "up" == solve(world, @move_timeout, _max_depth = 3)
     end
   end
 end

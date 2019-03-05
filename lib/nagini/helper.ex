@@ -48,6 +48,10 @@ defmodule Nagini.Helper do
       if possible_head_to_head do
         # Assume opponent has a 1 in 3 oppurtunity to collide head to head
         # TODO: Make a smarter prediction of what the other snake will choose
+        #
+        # This is a naive assumption that an opponent snake always has a 1 in 3
+        # chance of moving from a neighboring cell into this one
+
         1/3
       else
         0
@@ -143,5 +147,13 @@ defmodule Nagini.Helper do
 
   def adjascent?(%Coord{x: ax, y: ay}, %Coord{x: bx, y: by}) do
     (ax == bx and abs(ay - by) == 1) or (ay == by and abs(ax - bx) == 1)
+  end
+
+  def food_at?(%World{board: %Board{food: food}}, %Coord{} = coord) do
+    Enum.any?(food, &(food_at?(&1, coord)))
+  end
+
+  def food_at?(%Coord{} = a, %Coord{} = b) do
+    a.x == b.x && a.y == b.y
   end
 end

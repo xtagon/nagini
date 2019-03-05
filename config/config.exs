@@ -29,7 +29,6 @@ config :logger, :debug_log,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-import_config "battlesnake.exs"
 import_config "appsignal.exs"
 
 config :nagini, basic_auth: [

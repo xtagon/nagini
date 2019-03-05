@@ -52,7 +52,7 @@ defmodule NaginiWeb.BattlesnakeControllerTest do
       headType = snake_configuration["headType"]
       tailType = snake_configuration["tailType"]
 
-      assert Regex.match?(@valid_color, color)
+      assert color == nil || Regex.match?(@valid_color, color)
       assert Enum.member?(@valid_head_types, headType)
       assert Enum.member?(@valid_tail_types, tailType)
     end

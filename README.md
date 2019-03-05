@@ -13,8 +13,6 @@ To start your Phoenix server:
 Now you can use [`localhost:4000`](http://localhost:4000) as a Battlesnake
 endpoint.
 
-To modify snake configuration, edit `config/battlesnake.exs`.
-
 The logger is configured to log at the debug level (very verbose) and logs are
 stored in `/tmp/nagini.log`. This is a workaround for Nanobox stdout log
 streaming being broken.
@@ -26,6 +24,19 @@ To start your Ember admin frontend:
   * Start Ember with `./node_modules/.bin/ember serve`
 
 Now you can view [`localhost:4200/admin/`](http://localhost:4200/admin/)
+
+## Configuration
+
+To customize your snake, set these environment variables:
+
+  * `SNAKE_COLOR`
+  * `SNAKE_HEAD`
+  * `SNAKE_TAIL`
+
+To tune the solver, set these environment variables:
+
+  * `SOLVER_TIMEOUT=infinity`
+  * `SOLVER_DEPTH=0`
 
 ## Development with Nanobox
 
@@ -60,10 +71,6 @@ Deploy:
   * `nanobox evar add app-name ADMIN_USER=fixme ADMIN_PASS=fixme`
   * `nanobox evar add app-name APPSIGNAL_APP_NAME="Nagini" APPSIGNAL_APP_ENV="prod" APPSIGNAL_PUSH_API_KEY="FIXME"`
   * `nanobox deploy`
-
-## Configuration
-
-  * Edit `config/battlesnake.exs`
 
 ## Monitoring
 
