@@ -31,6 +31,9 @@ defmodule Nagini.Solver do
     not_dead_yet = Enum.any?(solutions_that_dont_kill_me)
 
     solutions = if depth < max_depth && not_dead_yet do
+      future_world_base = world
+      |> simulate_opponent_moves()
+
       solutions_with_futures_considered = solutions_that_dont_kill_me
       |> Task.async_stream(fn solution ->
         Logger.debug("Considering a future in which I move #{solution.direction} on the next turn")
@@ -38,9 +41,8 @@ defmodule Nagini.Solver do
         #did_eat = solution.value.food_seeking >= 1
         did_eat = nil
 
-        future_world = world
+        future_world = future_world_base
         |> simulate_your_move(solution.direction, did_eat)
-        |> simulate_opponent_moves()
 
         best_future_solution = solve(future_world, timeout, max_depth, depth + 1)
 
