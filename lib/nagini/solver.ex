@@ -32,7 +32,7 @@ defmodule Nagini.Solver do
 
     solutions = if depth < max_depth && not_dead_yet do
       solutions_with_futures_considered = solutions_that_dont_kill_me
-      |> Enum.map(fn solution ->
+      |> Task.async_stream(fn solution ->
         Logger.debug("Considering a future in which I move #{solution.direction} on the next turn")
 
         #did_eat = solution.value.food_seeking >= 1
@@ -60,6 +60,8 @@ defmodule Nagini.Solver do
 
         revised_solution
       end)
+      |> Enum.to_list
+      |> Enum.map(fn {:ok, snake} -> snake end)
 
       if depth == 0 do
         Logger.debug("All solutions after considering futures are: #{inspect(solutions_with_futures_considered)}")
