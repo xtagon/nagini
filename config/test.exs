@@ -6,7 +6,9 @@ config :nagini, NaginiWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-config :logger, level: :error
+config :logger,
+  level: :error,
+  compile_time_purge_level: :error
 
 config :eventstore, EventStore.Storage,
   serializer: Commanded.Serialization.JsonSerializer,

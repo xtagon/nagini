@@ -19,7 +19,9 @@ config :nagini, NaginiWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Print debug messages in production
-config :logger, level: :debug
+config :logger,
+  level: :info,
+  compile_time_purge_level: :info
 
 # ## SSL Support
 #

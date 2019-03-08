@@ -102,7 +102,7 @@ defmodule Nagini.Helper do
     |> Enum.reject(&(&1.outcome == :free))
 
     if length(collisions) > 0 do
-      Logger.debug("Move to #{inspect(target)} would have the following collisions: #{inspect(collisions)}")
+      Logger.debug(fn -> "Move to #{inspect(target)} would have the following collisions: #{inspect(collisions)}" end)
 
       worst_collision = Enum.sort_by(collisions, &(&1.value)) |> Enum.at(0)
 
@@ -116,7 +116,7 @@ defmodule Nagini.Helper do
         average_value
       end
     else
-      Logger.debug("Moving #{direction} to #{inspect(target)} would have no collisions.")
+      Logger.debug(fn -> "Moving #{direction} to #{inspect(target)} would have no collisions." end)
       0
     end
   end
@@ -131,10 +131,10 @@ defmodule Nagini.Helper do
 
     case nearest_food_distance do
       nil ->
-        Logger.debug("There is no food on the board.")
+        Logger.debug(fn -> "There is no food on the board." end)
         0
       0 ->
-        Logger.debug("There is food directly adjascent to me.")
+        Logger.debug(fn -> "There is food directly adjascent to me." end)
         1
       _ ->
         1 / nearest_food_distance

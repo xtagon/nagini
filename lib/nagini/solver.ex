@@ -16,7 +16,7 @@ defmodule Nagini.Solver do
     max_depth,
     depth
   ) do
-    Logger.debug("Solving for turn #{turn} at depth #{depth} (future turn #{turn + depth}) for snake #{you.name} of ID #{you.id} in game #{game_id}")
+    Logger.debug(fn -> "Solving for turn #{turn} at depth #{depth} (future turn #{turn + depth}) for snake #{you.name} of ID #{you.id} in game #{game_id}" end)
 
     # Sorting by multiple fields has to happen in reverse order, so keep that in mind
     solutions = @directions
@@ -24,7 +24,7 @@ defmodule Nagini.Solver do
     |> sort_solutions_by_value
 
     if depth == 0 do
-      Logger.debug("All solutions before considering futures are: #{inspect(solutions)}")
+      Logger.debug(fn -> "All solutions before considering futures are: #{inspect(solutions)}" end)
     end
 
     solutions_that_dont_kill_me = Enum.filter(solutions, &(&1.value.collision_avoidance > -1))
@@ -36,7 +36,7 @@ defmodule Nagini.Solver do
 
       solutions_with_futures_considered = solutions_that_dont_kill_me
       |> Task.async_stream(fn solution ->
-        Logger.debug("Considering a future in which I move #{solution.direction} on the next turn")
+        Logger.debug(fn -> "Considering a future in which I move #{solution.direction} on the next turn" end)
 
         #did_eat = solution.value.food_seeking >= 1
         did_eat = nil
@@ -66,7 +66,7 @@ defmodule Nagini.Solver do
       |> Enum.map(fn {:ok, snake} -> snake end)
 
       if depth == 0 do
-        Logger.debug("All solutions after considering futures are: #{inspect(solutions_with_futures_considered)}")
+        Logger.debug(fn -> "All solutions after considering futures are: #{inspect(solutions_with_futures_considered)}" end)
       end
 
       solutions_with_futures_considered
@@ -85,10 +85,10 @@ defmodule Nagini.Solver do
     if depth == 0 do
       best_move = case best_solution do
         nil ->
-          Logger.debug("No solution found")
+          Logger.debug(fn -> "No solution found" end)
           nil
         _ ->
-          Logger.debug("Best solution is: #{inspect(best_solution)}")
+          Logger.debug(fn -> "Best solution is: #{inspect(best_solution)}" end)
           best_solution[:direction]
       end
 
@@ -106,11 +106,11 @@ defmodule Nagini.Solver do
     target = step(you, direction)
 
     collision_avoidance = if out_of_bounds?(world, target) do
-      Logger.debug("Moving #{direction} would result in wall collision")
+      Logger.debug(fn -> "Moving #{direction} would result in wall collision" end)
       -1
     else
       value = value_of_collision_with_snake(world, target, direction)
-      Logger.debug("Value of moving #{direction} is predicted to be #{inspect(value)}")
+      Logger.debug(fn -> "Value of moving #{direction} is predicted to be #{inspect(value)}" end)
       value
     end
 
