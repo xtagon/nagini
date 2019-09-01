@@ -33,3 +33,5 @@ web.main:
 
 data.event_store:
   image: nanobox/postgresql:9.6
+  extra_packages:
+    - py36-awscli
