@@ -1,6 +1,12 @@
 # Nagini
 
-Nagini is a snake who battles at: http://battlesnake.io
+Nagini was a snake who used to compete at [Battlesnake](https://play.battlesnake.com/).
+
+The name is not to be confused with all of the other battlesnakes named Nagini.
+
+## Status
+
+This project is no longer in use, and **not currently supported or maintained**. There are known security advisories for outdated dependencies with no current plans to address or update them, and I don't recommend running this without due dilligence. It is left here for historical reasons.
 
 ## Getting Started
 
